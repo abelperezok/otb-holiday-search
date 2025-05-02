@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9FB61A23-2898-4063-9086-C6511619591F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E5A9409B-07C8-4DDF-A0B3-C95389B27A05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OTB.HolidaySearch", "src\OTB.HolidaySearch\OTB.HolidaySearch.csproj", "{6FF515D3-6D6D-490F-9777-B786D0083EA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OTB.HolidaySearch.Tests", "test\OTB.HolidaySearch.Tests\OTB.HolidaySearch.Tests.csproj", "{8424E055-96C8-405E-BA48-4D741A79BE92}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6FF515D3-6D6D-490F-9777-B786D0083EA5} = {9FB61A23-2898-4063-9086-C6511619591F}
+		{8424E055-96C8-405E-BA48-4D741A79BE92} = {E5A9409B-07C8-4DDF-A0B3-C95389B27A05}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FF515D3-6D6D-490F-9777-B786D0083EA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FF515D3-6D6D-490F-9777-B786D0083EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FF515D3-6D6D-490F-9777-B786D0083EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FF515D3-6D6D-490F-9777-B786D0083EA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8424E055-96C8-405E-BA48-4D741A79BE92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8424E055-96C8-405E-BA48-4D741A79BE92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8424E055-96C8-405E-BA48-4D741A79BE92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8424E055-96C8-405E-BA48-4D741A79BE92}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
