@@ -68,9 +68,11 @@ public class HolidaySearchServiceTests
                 new HotelDataModel
                 {
                     Id = 9,
+                    Name = "Nh Malaga",
                     ArrivalDate = new DateOnly(2023, 7, 1),
                     PricePerNight = 83,
-                    LocalAirports = [ "AGP" ]
+                    LocalAirports = [ "AGP" ],
+                    Nights = 7
                 }
             ]);
         
@@ -89,6 +91,16 @@ public class HolidaySearchServiceTests
 
         // Assert
         Assert.Equal(2, result.Results.First().Flight.Id);
+        Assert.Equal("MAN", result.Results.First().Flight.DepartingFrom);
+        Assert.Equal("AGP", result.Results.First().Flight.TravelingTo);
+        Assert.Equal(245, result.Results.First().Flight.Price);
+        Assert.Equal("Oceanic Airlines", result.Results.First().Flight.Airline);
+        Assert.Equal(new DateOnly(2023, 7, 1), result.Results.First().Flight.DepartureDate);
         Assert.Equal(9, result.Results.First().Hotel.Id);
+        Assert.Equal("Nh Malaga", result.Results.First().Hotel.Name);
+        Assert.Equal(new DateOnly(2023, 7, 1), result.Results.First().Hotel.ArrivalDate);
+        Assert.Equal(7 * 83, result.Results.First().Hotel.Price);
+        Assert.Equal("AGP", result.Results.First().Hotel.LocalAirports[0]);
+        Assert.Equal(7u, result.Results.First().Hotel.Nights);
     }
 }

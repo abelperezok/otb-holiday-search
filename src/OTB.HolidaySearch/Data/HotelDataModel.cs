@@ -20,5 +20,5 @@ public class HotelDataModel
     public List<string> LocalAirports { get; set; } = [];
     
     [JsonPropertyName("nights")]
-    public int Nights { get; set; }
+    public uint Nights { get; set; }
 }
