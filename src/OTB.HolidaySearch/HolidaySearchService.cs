@@ -37,7 +37,8 @@ public class HolidaySearchService
             result.Results.Add(new HolidaySearchResultItem
             {
                 Flight = flight,
-                Hotel = hotel
+                Hotel = hotel,
+                TotalPrice = flight.Price + hotel.Price,
             });
         }
 
