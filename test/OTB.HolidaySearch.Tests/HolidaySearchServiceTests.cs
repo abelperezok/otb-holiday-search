@@ -8,21 +8,64 @@ namespace OTB.HolidaySearch.Tests;
 public class HolidaySearchServiceTests
 {
     [Fact]
-    public void TestSearchEmptyData()
+    public void TestSearchEmptyDataNoFlightsNoHotels()
     {
         // Arrange
         var flightRepo = new Mock<IFlightRepository>();
-            
+
         flightRepo
             .Setup(x => x.GetFlights(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
             .Returns([]);
-        
+
         var hotelRepo = new Mock<IHotelRepository>();
-            
+
         hotelRepo
             .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
             .Returns([]);
-        
+
+        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object);
+        var query = new HolidaySearchRequest
+        {
+            DepartingFrom = string.Empty,
+            TravelingTo = string.Empty,
+            DepartureDate = DateOnly.MinValue,
+            Duration = 0
+        };
+
+        // Act
+        var result = service.Search(query);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result.Results);
+    }
+
+    [Fact]
+    public void TestSearchEmptyDataFlightsNoHotels()
+    {
+        // Arrange
+        var flightRepo = new Mock<IFlightRepository>();
+
+        flightRepo
+            .Setup(x => x.GetFlights(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
+            .Returns([
+                new FlightDataModel
+                {
+                    Id = 2,
+                    From = "MAN",
+                    To = "AGP",
+                    DepartureDate = new DateOnly(2023, 7, 1),
+                    Price = 245,
+                    Airline = "Oceanic Airlines"
+                }
+            ]);
+
+        var hotelRepo = new Mock<IHotelRepository>();
+
+        hotelRepo
+            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
+            .Returns([]);
+
         var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object);
         var query = new HolidaySearchRequest
         {
@@ -45,7 +88,7 @@ public class HolidaySearchServiceTests
     {
         // Arrange
         var flightRepo = new Mock<IFlightRepository>();
-            
+
         flightRepo
             .Setup(x => x.GetFlights(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
             .Returns([
@@ -59,9 +102,9 @@ public class HolidaySearchServiceTests
                     Airline = "Oceanic Airlines"
                 }
             ]);
-        
+
         var hotelRepo = new Mock<IHotelRepository>();
-            
+
         hotelRepo
             .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
             .Returns([
@@ -71,12 +114,12 @@ public class HolidaySearchServiceTests
                     Name = "Nh Malaga",
                     ArrivalDate = new DateOnly(2023, 7, 1),
                     PricePerNight = 83,
-                    LocalAirports = [ "AGP" ],
+                    LocalAirports = ["AGP"],
                     Nights = 7
                 }
             ]);
-        
-        
+
+
         var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object);
         var query = new HolidaySearchRequest
         {
