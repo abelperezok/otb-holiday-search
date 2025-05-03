@@ -1,4 +1,7 @@
-﻿using OTB.HolidaySearch.Models;
+﻿using System.Collections.ObjectModel;
+using Moq;
+using OTB.HolidaySearch.Data;
+using OTB.HolidaySearch.Models;
 
 namespace OTB.HolidaySearch.Tests;
 
@@ -8,7 +11,13 @@ public class HolidaySearchServiceTests
     public void TestSearchEmptyData()
     {
         // Arrange
-        var service = new HolidaySearchService();
+        var flightRepo = new Mock<IFlightRepository>();
+            
+        flightRepo
+            .Setup(x => x.GetFlights(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
+            .Returns([]);
+        
+        var service = new HolidaySearchService(flightRepo.Object);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = string.Empty,
@@ -29,7 +38,21 @@ public class HolidaySearchServiceTests
     public void TestManchesterMalagaJuly2023For7Nights()
     {
         // Arrange
-        var service = new HolidaySearchService();
+        var flightRepo = new Mock<IFlightRepository>();
+            
+        flightRepo
+            .Setup(x => x.GetFlights(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
+            .Returns([
+                new FlightDataModel
+                {
+                    Id = 2,
+                    From = "MAN",
+                    To = "AGP",
+                    DepartureDate = new DateOnly(2023, 7, 1),
+                }
+            ]);
+        
+        var service = new HolidaySearchService(flightRepo.Object);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = "MAN",
