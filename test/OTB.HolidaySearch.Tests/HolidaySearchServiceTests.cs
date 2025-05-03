@@ -17,7 +17,13 @@ public class HolidaySearchServiceTests
             .Setup(x => x.GetFlights(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
             .Returns([]);
         
-        var service = new HolidaySearchService(flightRepo.Object);
+        var hotelRepo = new Mock<IHotelRepository>();
+            
+        hotelRepo
+            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
+            .Returns([]);
+        
+        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = string.Empty,
@@ -49,10 +55,27 @@ public class HolidaySearchServiceTests
                     From = "MAN",
                     To = "AGP",
                     DepartureDate = new DateOnly(2023, 7, 1),
+                    Price = 245,
+                    Airline = "Oceanic Airlines"
                 }
             ]);
         
-        var service = new HolidaySearchService(flightRepo.Object);
+        var hotelRepo = new Mock<IHotelRepository>();
+            
+        hotelRepo
+            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
+            .Returns([
+                new HotelDataModel
+                {
+                    Id = 9,
+                    ArrivalDate = new DateOnly(2023, 7, 1),
+                    PricePerNight = 83,
+                    LocalAirports = [ "AGP" ]
+                }
+            ]);
+        
+        
+        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = "MAN",

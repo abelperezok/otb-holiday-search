@@ -6,10 +6,12 @@ namespace OTB.HolidaySearch;
 public class HolidaySearchService
 {
     private readonly IFlightRepository _flightRepository;
+    private readonly IHotelRepository _hotelRepository;
     
-    public HolidaySearchService(IFlightRepository flightRepository)
+    public HolidaySearchService(IFlightRepository flightRepository, IHotelRepository hotelRepository)
     {
         _flightRepository = flightRepository;
+        _hotelRepository = hotelRepository;
     }
     
     public HolidaySearchResults Search(HolidaySearchRequest query)
@@ -21,12 +23,21 @@ public class HolidaySearchService
         if (flights.Count == 0)
             return result;
 
-        for (var i = 0; i < flights.Count; i++)
+        var hotels = GetHotels(query.DepartureDate, query.Duration, query.TravelingTo);
+        
+        if (hotels.Count == 0)
+            return result;
+        
+        var count = Math.Min(flights.Count, hotels.Count);
+        
+        for (var i = 0; i < count; i++)
         {
             var flight = flights[i];
+            var hotel = hotels[i];
             result.Results.Add(new HolidaySearchResultItem
             {
                 Flight = flight,
+                Hotel = hotel
             });
         }
 
@@ -45,6 +56,19 @@ public class HolidaySearchService
                 DepartingFrom = x.From,
                 TravelingTo = x.To,
                 Price = x.Price
+            })
+            .ToList();
+    }
+    
+    
+    private List<HolidaySearchHotel> GetHotels(DateOnly arrivalDate, uint nights, string localAirport)
+    {
+        var hotels = _hotelRepository.GetHotels(arrivalDate, nights, localAirport);
+        return hotels.Select(x => new HolidaySearchHotel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Price = x.PricePerNight
             })
             .ToList();
     }
