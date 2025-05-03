@@ -55,7 +55,9 @@ public class HolidaySearchService
                 Id = x.Id,
                 DepartingFrom = x.From,
                 TravelingTo = x.To,
-                Price = x.Price
+                Price = x.Price,
+                DepartureDate = x.DepartureDate,
+                Airline = x.Airline
             })
             .ToList();
     }
@@ -68,7 +70,10 @@ public class HolidaySearchService
             {
                 Id = x.Id,
                 Name = x.Name,
-                Price = x.PricePerNight
+                Price = x.PricePerNight * x.Nights,
+                ArrivalDate = x.ArrivalDate,
+                LocalAirports = x.LocalAirports,
+                Nights = x.Nights
             })
             .ToList();
     }
