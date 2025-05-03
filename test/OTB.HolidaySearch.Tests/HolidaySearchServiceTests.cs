@@ -102,5 +102,6 @@ public class HolidaySearchServiceTests
         Assert.Equal(7 * 83, result.Results.First().Hotel.Price);
         Assert.Equal("AGP", result.Results.First().Hotel.LocalAirports[0]);
         Assert.Equal(7u, result.Results.First().Hotel.Nights);
+        Assert.Equal(826, result.Results.First().TotalPrice);
     }
 }
