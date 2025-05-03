@@ -5,7 +5,7 @@ namespace OTB.HolidaySearch.Tests;
 public class HolidaySearchServiceTests
 {
     [Fact]
-    public void TestSearch_EmptyData()
+    public void TestSearchEmptyData()
     {
         // Arrange
         var service = new HolidaySearchService();
@@ -16,12 +16,33 @@ public class HolidaySearchServiceTests
             DepartureDate = DateOnly.MinValue,
             Duration = 0
         };
-        
+
         // Act
         var result = service.Search(query);
-        
+
         // Assert
         Assert.NotNull(result);
         Assert.Empty(result.Results);
+    }
+
+    [Fact]
+    public void TestManchesterMalagaJuly2023For7Nights()
+    {
+        // Arrange
+        var service = new HolidaySearchService();
+        var query = new HolidaySearchRequest
+        {
+            DepartingFrom = "MAN",
+            TravelingTo = "AGP",
+            DepartureDate = new DateOnly(2023, 7, 1),
+            Duration = 7
+        };
+
+        // Act
+        var result = service.Search(query);
+
+        // Assert
+        Assert.Equal(2, result.Results.First().Flight.Id);
+        Assert.Equal(9, result.Results.First().Hotel.Id);
     }
 }
