@@ -1,6 +1,5 @@
 using System.Text.Json;
 using OTB.HolidaySearch.Data;
-using OTB.HolidaySearch.Models;
 
 namespace OTB.HolidaySearch.Tests;
 
@@ -48,5 +47,21 @@ public class JsonFlightRepositoryTests
         // Assert
         Assert.IsType<JsonException>(ex.InnerException);
         Assert.Equal("Invalid json content", ex.Message);
+    }
+    
+    [Fact]
+    public void TestCreateWithInvalidFileContentValidJson()
+    {
+        // Arrange
+
+        // Act
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+        {
+            var repo = new JsonFlightRepository(JsonFilePathConstants.EmptyValidJsonPath);
+        });
+
+        // Assert
+        Assert.IsType<JsonException>(ex.InnerException);
+        Assert.Equal("Invalid json content - null data", ex.Message);
     }
 }

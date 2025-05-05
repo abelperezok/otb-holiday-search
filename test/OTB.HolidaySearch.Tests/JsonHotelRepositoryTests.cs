@@ -33,7 +33,6 @@ public class JsonHotelRepositoryTests
         Assert.Equal("Unable to load json file", ex.Message);
     }
     
-    
     [Fact]
     public void TestCreateWithInvalidFileContent()
     {
@@ -48,5 +47,21 @@ public class JsonHotelRepositoryTests
         // Assert
         Assert.IsType<JsonException>(ex.InnerException);
         Assert.Equal("Invalid json content", ex.Message);
+    }
+    
+    [Fact]
+    public void TestCreateWithInvalidFileContentValidJson()
+    {
+        // Arrange
+
+        // Act
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+        {
+            var repo = new JsonHotelRepository(JsonFilePathConstants.EmptyValidJsonPath);
+        });
+
+        // Assert
+        Assert.IsType<JsonException>(ex.InnerException);
+        Assert.Equal("Invalid json content - null data", ex.Message);
     }
 }
