@@ -7,10 +7,13 @@ public class HolidaySearchServiceIntegrationTests
 {
     private readonly IFlightRepository _flightRepo;
     private readonly IHotelRepository _hotelRepo;
+    private const string FlightJsonPath = "../../../../data/flights.json";
+    private const string HotelJsonPath = "../../../../data/hotels.json";
     
     public HolidaySearchServiceIntegrationTests()
     {
-        // _flightRepo = new 
+        _flightRepo = new JsonFlightRepository(FlightJsonPath);
+        _hotelRepo = new JsonHotelRepository(HotelJsonPath);
     }
     
     [Fact]

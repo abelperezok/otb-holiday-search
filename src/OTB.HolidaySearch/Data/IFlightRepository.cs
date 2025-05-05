@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-
 namespace OTB.HolidaySearch.Data;
 
 public interface IFlightRepository
