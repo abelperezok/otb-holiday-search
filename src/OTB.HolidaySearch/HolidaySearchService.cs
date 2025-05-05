@@ -7,20 +7,25 @@ public class HolidaySearchService
 {
     private readonly IFlightRepository _flightRepository;
     private readonly IHotelRepository _hotelRepository;
+    private readonly IAirportSearchKeyExpander _airportSearchKeyExpander;
 
-    public HolidaySearchService(IFlightRepository flightRepository, IHotelRepository hotelRepository)
+    public HolidaySearchService(
+        IFlightRepository flightRepository, 
+        IHotelRepository hotelRepository, 
+        IAirportSearchKeyExpander airportSearchKeyExpander)
     {
         _flightRepository = flightRepository;
         _hotelRepository = hotelRepository;
+        _airportSearchKeyExpander = airportSearchKeyExpander;
     }
 
     public HolidaySearchResults Search(HolidaySearchRequest query)
     {
         var result = new HolidaySearchResults();
         
-        var departingFromAirports = GetAirportList(query.DepartingFrom);
+        var departingFrom = _airportSearchKeyExpander.ExpandAirportList(query.DepartingFrom);
 
-        var flights = GetFlights(departingFromAirports, query.TravelingTo, query.DepartureDate);
+        var flights = GetFlights(departingFrom, query.TravelingTo, query.DepartureDate);
 
         if (flights.Count == 0)
             return result;
@@ -46,20 +51,6 @@ public class HolidaySearchService
 
         return result;
     }
-
-
-    private string[] GetAirportList(string searchKey)
-    {
-        return searchKey switch
-        {
-            HolidaySearchRequestAirports.AnyAirport => [],
-            HolidaySearchRequestAirports.AnyLondonAirport => ["LCY", "LHR", "LGW", "LTN", "STN", "SEN"],
-            HolidaySearchRequestAirports.AnyNewYorkAirport => ["NYC", "LGA", "SWF", "NYS", "JFK", "EWR"],
-            _ => [searchKey]
-        };
-    }
-
-
 
     private List<HolidaySearchFlight> GetFlights(string[] departingFrom, string travelingTo, DateOnly departureDate)
     {

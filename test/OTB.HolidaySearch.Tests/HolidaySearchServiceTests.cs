@@ -22,8 +22,10 @@ public class HolidaySearchServiceTests
         hotelRepo
             .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
             .Returns([]);
+        
+        var airportExpander = new DefaultAirportSearchKeyExpander();
 
-        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object);
+        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object, airportExpander);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = string.Empty,
@@ -66,7 +68,9 @@ public class HolidaySearchServiceTests
             .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
             .Returns([]);
 
-        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object);
+        var airportExpander = new DefaultAirportSearchKeyExpander();
+
+        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object, airportExpander);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = string.Empty,
@@ -119,8 +123,9 @@ public class HolidaySearchServiceTests
                 }
             ]);
 
+        var airportExpander = new DefaultAirportSearchKeyExpander();
 
-        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object);
+        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object, airportExpander);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = "MAN",

@@ -7,6 +7,7 @@ public class HolidaySearchServiceIntegrationTests
 {
     private readonly IFlightRepository _flightRepo;
     private readonly IHotelRepository _hotelRepo;
+    private readonly IAirportSearchKeyExpander _airportSearchKeyExpander;
     private const string FlightJsonPath = "../../../../data/flights.json";
     private const string HotelJsonPath = "../../../../data/hotels.json";
     
@@ -14,13 +15,14 @@ public class HolidaySearchServiceIntegrationTests
     {
         _flightRepo = new JsonFlightRepository(FlightJsonPath);
         _hotelRepo = new JsonHotelRepository(HotelJsonPath);
+        _airportSearchKeyExpander = new DefaultAirportSearchKeyExpander();
     }
     
     [Fact]
     public void TestSearchEmptyQuery()
     {
         // Arrange
-        var service = new HolidaySearchService(_flightRepo, _hotelRepo);
+        var service = new HolidaySearchService(_flightRepo, _hotelRepo, _airportSearchKeyExpander);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = string.Empty,
@@ -41,7 +43,7 @@ public class HolidaySearchServiceIntegrationTests
     public void TestCustomer1ManchesterMalagaJuly2023For7Nights()
     {
         // Arrange
-        var service = new HolidaySearchService(_flightRepo, _hotelRepo);
+        var service = new HolidaySearchService(_flightRepo, _hotelRepo, _airportSearchKeyExpander);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = "MAN",
@@ -74,7 +76,7 @@ public class HolidaySearchServiceIntegrationTests
     {
         // Arrange
         var holidayDate = new DateOnly(2023, 06, 15);
-        var service = new HolidaySearchService(_flightRepo, _hotelRepo);
+        var service = new HolidaySearchService(_flightRepo, _hotelRepo, _airportSearchKeyExpander);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = HolidaySearchRequestAirports.AnyLondonAirport,
@@ -107,7 +109,7 @@ public class HolidaySearchServiceIntegrationTests
     {
         // Arrange
         var holidayDate = new DateOnly(2022, 11, 10);
-        var service = new HolidaySearchService(_flightRepo, _hotelRepo);
+        var service = new HolidaySearchService(_flightRepo, _hotelRepo, _airportSearchKeyExpander);
         var query = new HolidaySearchRequest
         {
             DepartingFrom = HolidaySearchRequestAirports.AnyAirport,
