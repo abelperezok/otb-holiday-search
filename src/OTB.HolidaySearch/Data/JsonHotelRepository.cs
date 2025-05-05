@@ -11,7 +11,8 @@ public class JsonHotelRepository : IHotelRepository
         try
         {
             var json = File.ReadAllText(jsonFilePath);
-            _data = JsonSerializer.Deserialize<List<HotelDataModel>>(json) ?? [];
+            var data = JsonSerializer.Deserialize<List<HotelDataModel>>(json);
+            _data = data ?? throw new JsonException("Invalid json content - null data");
         }
         catch (FileNotFoundException ex)
         {

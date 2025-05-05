@@ -11,7 +11,8 @@ public class JsonFlightRepository : IFlightRepository
         try
         {
             var json = File.ReadAllText(jsonFilePath);
-            _data = JsonSerializer.Deserialize<List<FlightDataModel>>(json) ?? [];
+            var data = JsonSerializer.Deserialize<List<FlightDataModel>>(json);
+            _data = data ?? throw new JsonException("Invalid json content - null data");
         }
         catch (FileNotFoundException ex)
         {

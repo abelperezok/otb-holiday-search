@@ -41,7 +41,7 @@ public class JsonHotelRepositoryTests
         // Act
         var ex = Assert.Throws<InvalidOperationException>(() =>
         {
-            var repo = new JsonHotelRepository(JsonFilePathConstants.EmptyJsonPath);
+            _ = new JsonHotelRepository(JsonFilePathConstants.EmptyJsonPath);
         });
 
         // Assert
@@ -57,11 +57,11 @@ public class JsonHotelRepositoryTests
         // Act
         var ex = Assert.Throws<InvalidOperationException>(() =>
         {
-            var repo = new JsonHotelRepository(JsonFilePathConstants.EmptyValidJsonPath);
+            _ = new JsonHotelRepository(JsonFilePathConstants.NullJsonPath);
         });
 
         // Assert
         Assert.IsType<JsonException>(ex.InnerException);
-        Assert.Equal("Invalid json content - null data", ex.Message);
+        Assert.Equal("Invalid json content - null data", ex.InnerException.Message);
     }
 }

@@ -41,7 +41,7 @@ public class JsonFlightRepositoryTests
         // Act
         var ex = Assert.Throws<InvalidOperationException>(() =>
         {
-            var repo = new JsonFlightRepository(JsonFilePathConstants.EmptyJsonPath);
+            _ = new JsonFlightRepository(JsonFilePathConstants.EmptyJsonPath);
         });
 
         // Assert
@@ -57,11 +57,11 @@ public class JsonFlightRepositoryTests
         // Act
         var ex = Assert.Throws<InvalidOperationException>(() =>
         {
-            var repo = new JsonFlightRepository(JsonFilePathConstants.EmptyValidJsonPath);
+            _ = new JsonFlightRepository(JsonFilePathConstants.NullJsonPath);
         });
 
         // Assert
         Assert.IsType<JsonException>(ex.InnerException);
-        Assert.Equal("Invalid json content - null data", ex.Message);
+        Assert.Equal("Invalid json content - null data", ex.InnerException.Message);
     }
 }
