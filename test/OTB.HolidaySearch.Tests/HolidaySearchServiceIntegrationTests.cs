@@ -70,6 +70,39 @@ public class HolidaySearchServiceIntegrationTests
     }
     
     [Fact]
+    public void TestCustomer2AnyLondonAirportMallorca15Jun2023For10Nights()
+    {
+        // Arrange
+        var holidayDate = new DateOnly(2023, 06, 15);
+        var service = new HolidaySearchService(_flightRepo, _hotelRepo);
+        var query = new HolidaySearchRequest
+        {
+            DepartingFrom = "Any London Airport",
+            TravelingTo = "PMI",
+            DepartureDate = holidayDate,
+            Duration = 10
+        };
+
+        // Act
+        var result = service.Search(query);
+
+        // Assert
+        Assert.Equal(6, result.Results.First().Flight.Id);
+        Assert.Equal("LGW", result.Results.First().Flight.DepartingFrom);
+        Assert.Equal("PMI", result.Results.First().Flight.TravelingTo);
+        Assert.Equal(75, result.Results.First().Flight.Price);
+        Assert.Equal("Fresh Airways", result.Results.First().Flight.Airline);
+        Assert.Equal(holidayDate, result.Results.First().Flight.DepartureDate);
+        Assert.Equal(5, result.Results.First().Hotel.Id);
+        Assert.Equal("Sol Katmandu Park & Resort", result.Results.First().Hotel.Name);
+        Assert.Equal(holidayDate, result.Results.First().Hotel.ArrivalDate);
+        Assert.Equal(10 * 60, result.Results.First().Hotel.Price);
+        Assert.Equal("PMI", result.Results.First().Hotel.LocalAirports[0]);
+        Assert.Equal(10u, result.Results.First().Hotel.Nights);
+        Assert.Equal(10 * 60 + 75, result.Results.First().TotalPrice);
+    }
+    
+    [Fact]
     public void TestCustomer3AnyAirportGranCanaria10Nov2022For14Nights()
     {
         // Arrange
