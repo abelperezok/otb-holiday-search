@@ -152,4 +152,88 @@ public class HolidaySearchServiceTests
         Assert.Equal(7u, result.Results.First().Hotel.Nights);
         Assert.Equal(826, result.Results.First().TotalPrice);
     }
+    
+    [Fact]
+    public void TestManchesterMultipleFlightsMultipleHotels()
+    {
+        // Arrange
+        var flightRepo = new Mock<IFlightRepository>();
+
+        flightRepo
+            .Setup(x => x.GetFlights(It.IsAny<string[]>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
+            .Returns([
+                new FlightDataModel
+                {
+                    Id = 2,
+                    From = "MAN",
+                    To = "AGP",
+                    DepartureDate = new DateOnly(2023, 7, 1),
+                    Price = 245,
+                    Airline = "Oceanic Airlines"
+                },
+                new FlightDataModel
+                {
+                    Id = 9,
+                    From = "MAN",
+                    To = "AGP",
+                    DepartureDate = new DateOnly(2023, 7, 1),
+                    Price = 140,
+                    Airline = "Fresh Airwayss"
+                }
+            ]);
+
+        var hotelRepo = new Mock<IHotelRepository>();
+
+        hotelRepo
+            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
+            .Returns([
+                new HotelDataModel
+                {
+                    Id = 9,
+                    Name = "Nh Malaga",
+                    ArrivalDate = new DateOnly(2023, 7, 1),
+                    PricePerNight = 83,
+                    LocalAirports = ["AGP"],
+                    Nights = 7
+                },
+                new HotelDataModel
+                {
+                    Id = 12,
+                    Name = "MS Maestranza Hotel",
+                    ArrivalDate = new DateOnly(2023, 7, 1),
+                    PricePerNight = 45,
+                    LocalAirports = ["AGP"],
+                    Nights = 7
+                }
+            ]);
+
+        var airportExpander = new DefaultAirportSearchKeyExpander();
+
+        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object, airportExpander);
+        var query = new HolidaySearchRequest
+        {
+            DepartingFrom = "MAN",
+            TravelingTo = "AGP",
+            DepartureDate = new DateOnly(2023, 7, 1),
+            Duration = 7
+        };
+
+        // Act
+        var result = service.Search(query);
+
+        // Assert
+        Assert.Equal(4, result.Results.Count);
+        Assert.Equal(9, result.Results[0].Flight.Id);
+        Assert.Equal(12, result.Results[0].Hotel.Id);
+        Assert.Equal(455, result.Results[0].TotalPrice);
+        Assert.Equal(2, result.Results[1].Flight.Id);
+        Assert.Equal(12, result.Results[1].Hotel.Id);
+        Assert.Equal(560, result.Results[1].TotalPrice);
+        Assert.Equal(9, result.Results[2].Flight.Id);
+        Assert.Equal(9, result.Results[2].Hotel.Id);
+        Assert.Equal(721, result.Results[2].TotalPrice);
+        Assert.Equal(2, result.Results[3].Flight.Id);
+        Assert.Equal(9, result.Results[3].Hotel.Id);
+        Assert.Equal(826, result.Results[3].TotalPrice);
+    }
 }
