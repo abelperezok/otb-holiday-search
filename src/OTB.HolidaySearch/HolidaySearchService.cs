@@ -70,24 +70,23 @@ public class HolidaySearchService
             .ToList();
     }
 
-    private List<HolidaySearchResultItem> MergeResults(List<HolidaySearchFlight> flights, List<HolidaySearchHotel> hotels)
+    private static List<HolidaySearchResultItem> MergeResults(List<HolidaySearchFlight> flights, List<HolidaySearchHotel> hotels)
     {
         var result = new List<HolidaySearchResultItem>();
         
-        var count = Math.Min(flights.Count, hotels.Count);
-
-        for (var i = 0; i < count; i++)
+        foreach (var flight in flights)
         {
-            var flight = flights[i];
-            var hotel = hotels[i];
-            result.Add(new HolidaySearchResultItem
+            foreach (var hotel in hotels)
             {
-                Flight = flight,
-                Hotel = hotel,
-                TotalPrice = flight.Price + hotel.Price,
-            });
+                result.Add(new HolidaySearchResultItem
+                {
+                    Flight = flight,
+                    Hotel = hotel,
+                    TotalPrice = flight.Price + hotel.Price,
+                });
+            }
         }
 
-        return result;
+        return result.OrderBy(x => x.TotalPrice).ToList();
     }
 }
