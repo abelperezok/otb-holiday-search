@@ -36,4 +36,36 @@ public class HolidaySearchServiceIntegrationTests
         Assert.NotNull(result);
         Assert.Empty(result.Results);
     }
+    
+    [Fact]
+    public void TestCustomer1ManchesterMalagaJuly2023For7Nights()
+    {
+        // Arrange
+        var service = new HolidaySearchService(_flightRepo, _hotelRepo);
+        var query = new HolidaySearchRequest
+        {
+            DepartingFrom = "MAN",
+            TravelingTo = "AGP",
+            DepartureDate = new DateOnly(2023, 7, 1),
+            Duration = 7
+        };
+
+        // Act
+        var result = service.Search(query);
+
+        // Assert
+        Assert.Equal(2, result.Results.First().Flight.Id);
+        Assert.Equal("MAN", result.Results.First().Flight.DepartingFrom);
+        Assert.Equal("AGP", result.Results.First().Flight.TravelingTo);
+        Assert.Equal(245, result.Results.First().Flight.Price);
+        Assert.Equal("Oceanic Airlines", result.Results.First().Flight.Airline);
+        Assert.Equal(new DateOnly(2023, 7, 1), result.Results.First().Flight.DepartureDate);
+        Assert.Equal(9, result.Results.First().Hotel.Id);
+        Assert.Equal("Nh Malaga", result.Results.First().Hotel.Name);
+        Assert.Equal(new DateOnly(2023, 7, 1), result.Results.First().Hotel.ArrivalDate);
+        Assert.Equal(7 * 83, result.Results.First().Hotel.Price);
+        Assert.Equal("AGP", result.Results.First().Hotel.LocalAirports[0]);
+        Assert.Equal(7u, result.Results.First().Hotel.Nights);
+        Assert.Equal(826, result.Results.First().TotalPrice);
+    }
 }
