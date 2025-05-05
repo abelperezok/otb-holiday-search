@@ -23,6 +23,8 @@ public class HolidaySearchService
 
     public HolidaySearchResults Search(HolidaySearchRequest query)
     {
+        ArgumentNullException.ThrowIfNull(query);
+
         var result = new HolidaySearchResults();
         
         var departingFrom = _airportSearchKeyExpander.ExpandAirportList(query.DepartingFrom);
