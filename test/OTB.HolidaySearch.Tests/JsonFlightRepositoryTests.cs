@@ -64,4 +64,21 @@ public class JsonFlightRepositoryTests
         Assert.IsType<JsonException>(ex.InnerException);
         Assert.Equal("Invalid json content - null data", ex.InnerException.Message);
     }
+    
+        
+    [Fact]
+    public void TestCreateWithInvalidFileDirectory()
+    {
+        // Arrange
+
+        // Act
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+        {
+            _ = new JsonFlightRepository(JsonFilePathConstants.InvalidJsonPath);
+        });
+
+        // Assert
+        Assert.IsType<DirectoryNotFoundException>(ex.InnerException);
+        Assert.Equal("Unknown error loading json file", ex.Message);
+    }
 }
