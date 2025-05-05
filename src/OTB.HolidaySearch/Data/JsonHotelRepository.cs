@@ -17,6 +17,10 @@ public class JsonHotelRepository : IHotelRepository
         {
             throw new InvalidOperationException("Unable to load json file", ex);
         }
+        catch (JsonException ex)
+        {
+            throw new InvalidOperationException("Invalid json content", ex);
+        }
         catch (Exception ex)
         {
             throw new InvalidOperationException("Unknown error loading json file", ex);
