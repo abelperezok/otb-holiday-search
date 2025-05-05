@@ -7,13 +7,13 @@ public class HolidaySearchService
 {
     private readonly IFlightRepository _flightRepository;
     private readonly IHotelRepository _hotelRepository;
-    
+
     public HolidaySearchService(IFlightRepository flightRepository, IHotelRepository hotelRepository)
     {
         _flightRepository = flightRepository;
         _hotelRepository = hotelRepository;
     }
-    
+
     public HolidaySearchResults Search(HolidaySearchRequest query)
     {
         var result = new HolidaySearchResults();
@@ -24,12 +24,12 @@ public class HolidaySearchService
             return result;
 
         var hotels = GetHotels(query.DepartureDate, query.Duration, query.TravelingTo);
-        
+
         if (hotels.Count == 0)
             return result;
-        
+
         var count = Math.Min(flights.Count, hotels.Count);
-        
+
         for (var i = 0; i < count; i++)
         {
             var flight = flights[i];
@@ -44,13 +44,32 @@ public class HolidaySearchService
 
         return result;
     }
-    
-    
-    
-    
+
+
+    private string[] GetAirportList(string? searchKey)
+    {
+        if (searchKey is null)
+            return [];
+        
+        if (searchKey == HolidaySearchRequestAirports.AnyLondonAirport)
+        {
+            return [ "LCY", "LHR", "LGW", "LTN", "STN", "SEN" ];
+        }
+        
+        if (searchKey == HolidaySearchRequestAirports.AnyNewYorkAirport)
+        {
+            return [ "NYC", "LGA", "SWF", "NYS", "JFK", "EWR" ];
+        }
+        
+        return [ searchKey ];
+    }
+
+
+
     private List<HolidaySearchFlight> GetFlights(string? departingFrom, string travelingTo, DateOnly departureDate)
     {
-        var flights = _flightRepository.GetFlights(departingFrom, travelingTo, departureDate);
+        var departingFromAirports = GetAirportList(departingFrom);
+        var flights = _flightRepository.GetFlights(departingFromAirports, travelingTo, departureDate);
         return flights.Select(x => new HolidaySearchFlight
             {
                 Id = x.Id,
@@ -62,8 +81,8 @@ public class HolidaySearchService
             })
             .ToList();
     }
-    
-    
+
+
     private List<HolidaySearchHotel> GetHotels(DateOnly arrivalDate, uint nights, string localAirport)
     {
         var hotels = _hotelRepository.GetHotels(arrivalDate, nights, localAirport);

@@ -77,7 +77,7 @@ public class HolidaySearchServiceIntegrationTests
         var service = new HolidaySearchService(_flightRepo, _hotelRepo);
         var query = new HolidaySearchRequest
         {
-            DepartingFrom = "Any London Airport",
+            DepartingFrom = HolidaySearchRequestAirports.AnyLondonAirport,
             TravelingTo = "PMI",
             DepartureDate = holidayDate,
             Duration = 10
