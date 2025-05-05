@@ -8,13 +8,12 @@ public class HolidaySearchServiceIntegrationTests
     private readonly IFlightRepository _flightRepo;
     private readonly IHotelRepository _hotelRepo;
     private readonly IAirportSearchKeyExpander _airportSearchKeyExpander;
-    private const string FlightJsonPath = "../../../../data/flights.json";
-    private const string HotelJsonPath = "../../../../data/hotels.json";
+
     
     public HolidaySearchServiceIntegrationTests()
     {
-        _flightRepo = new JsonFlightRepository(FlightJsonPath);
-        _hotelRepo = new JsonHotelRepository(HotelJsonPath);
+        _flightRepo = new JsonFlightRepository(JsonFilePathConstants.FlightJsonPath);
+        _hotelRepo = new JsonHotelRepository(JsonFilePathConstants.HotelJsonPath);
         _airportSearchKeyExpander = new DefaultAirportSearchKeyExpander();
     }
     
