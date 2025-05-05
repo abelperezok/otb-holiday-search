@@ -17,8 +17,10 @@ public class HolidaySearchService
     public HolidaySearchResults Search(HolidaySearchRequest query)
     {
         var result = new HolidaySearchResults();
+        
+        var departingFromAirports = GetAirportList(query.DepartingFrom);
 
-        var flights = GetFlights(query.DepartingFrom, query.TravelingTo, query.DepartureDate);
+        var flights = GetFlights(departingFromAirports, query.TravelingTo, query.DepartureDate);
 
         if (flights.Count == 0)
             return result;
@@ -46,30 +48,22 @@ public class HolidaySearchService
     }
 
 
-    private string[] GetAirportList(string? searchKey)
+    private string[] GetAirportList(string searchKey)
     {
-        if (searchKey is null)
-            return [];
-        
-        if (searchKey == HolidaySearchRequestAirports.AnyLondonAirport)
+        return searchKey switch
         {
-            return [ "LCY", "LHR", "LGW", "LTN", "STN", "SEN" ];
-        }
-        
-        if (searchKey == HolidaySearchRequestAirports.AnyNewYorkAirport)
-        {
-            return [ "NYC", "LGA", "SWF", "NYS", "JFK", "EWR" ];
-        }
-        
-        return [ searchKey ];
+            HolidaySearchRequestAirports.AnyAirport => [],
+            HolidaySearchRequestAirports.AnyLondonAirport => ["LCY", "LHR", "LGW", "LTN", "STN", "SEN"],
+            HolidaySearchRequestAirports.AnyNewYorkAirport => ["NYC", "LGA", "SWF", "NYS", "JFK", "EWR"],
+            _ => [searchKey]
+        };
     }
 
 
 
-    private List<HolidaySearchFlight> GetFlights(string? departingFrom, string travelingTo, DateOnly departureDate)
+    private List<HolidaySearchFlight> GetFlights(string[] departingFrom, string travelingTo, DateOnly departureDate)
     {
-        var departingFromAirports = GetAirportList(departingFrom);
-        var flights = _flightRepository.GetFlights(departingFromAirports, travelingTo, departureDate);
+        var flights = _flightRepository.GetFlights(departingFrom, travelingTo, departureDate);
         return flights.Select(x => new HolidaySearchFlight
             {
                 Id = x.Id,
