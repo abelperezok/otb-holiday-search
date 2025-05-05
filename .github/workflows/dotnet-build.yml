@@ -25,12 +25,17 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: >
-        dotnet test --no-build 
-        /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+      run: dotnet test --no-build --collect:"XPlat Code Coverage" --results-directory ./coverage
       working-directory: test/OTB.HolidaySearch.Tests
-    - name: Publish coverage report to coveralls.io
-      uses: coverallsapp/github-action@master
+    - name: Code Coverage Report
+      uses: irongut/CodeCoverageSummary@v1.3.0
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: test/OTB.HolidaySearch.Tests/TestResults/coverage.info
+        filename: coverage/**/coverage.cobertura.xml
+        badge: true
+        fail_below_min: true
+        format: markdown
+        hide_branch_rate: false
+        hide_complexity: true
+        indicators: true
+        output: both
+        thresholds: '60 80'
