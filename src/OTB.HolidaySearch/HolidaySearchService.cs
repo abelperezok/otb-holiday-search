@@ -35,19 +35,7 @@ public class HolidaySearchService
         if (hotels.Count == 0)
             return result;
 
-        var count = Math.Min(flights.Count, hotels.Count);
-
-        for (var i = 0; i < count; i++)
-        {
-            var flight = flights[i];
-            var hotel = hotels[i];
-            result.Results.Add(new HolidaySearchResultItem
-            {
-                Flight = flight,
-                Hotel = hotel,
-                TotalPrice = flight.Price + hotel.Price,
-            });
-        }
+        result.Results = MergeResults(flights, hotels);
 
         return result;
     }
@@ -67,7 +55,6 @@ public class HolidaySearchService
             .ToList();
     }
 
-
     private List<HolidaySearchHotel> GetHotels(DateOnly arrivalDate, uint nights, string localAirport)
     {
         var hotels = _hotelRepository.GetHotels(arrivalDate, nights, localAirport);
@@ -81,5 +68,26 @@ public class HolidaySearchService
                 Nights = x.Nights
             })
             .ToList();
+    }
+
+    private List<HolidaySearchResultItem> MergeResults(List<HolidaySearchFlight> flights, List<HolidaySearchHotel> hotels)
+    {
+        var result = new List<HolidaySearchResultItem>();
+        
+        var count = Math.Min(flights.Count, hotels.Count);
+
+        for (var i = 0; i < count; i++)
+        {
+            var flight = flights[i];
+            var hotel = hotels[i];
+            result.Add(new HolidaySearchResultItem
+            {
+                Flight = flight,
+                Hotel = hotel,
+                TotalPrice = flight.Price + hotel.Price,
+            });
+        }
+
+        return result;
     }
 }
