@@ -1,3 +1,4 @@
+using System.Text.Json;
 using OTB.HolidaySearch.Data;
 using OTB.HolidaySearch.Models;
 
@@ -30,5 +31,22 @@ public class JsonFlightRepositoryTests
 
         // Assert
         Assert.IsType<FileNotFoundException>(ex.InnerException);
+        Assert.Equal("Unable to load json file", ex.Message);
+    }    
+    
+    [Fact]
+    public void TestCreateWithInvalidFileContent()
+    {
+        // Arrange
+
+        // Act
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+        {
+            var repo = new JsonFlightRepository(JsonFilePathConstants.EmptyJsonPath);
+        });
+
+        // Assert
+        Assert.IsType<JsonException>(ex.InnerException);
+        Assert.Equal("Invalid json content", ex.Message);
     }
 }
