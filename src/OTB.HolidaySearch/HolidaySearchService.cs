@@ -48,7 +48,7 @@ public class HolidaySearchService
     
     
     
-    private List<HolidaySearchFlight> GetFlights(string departingFrom, string travelingTo, DateOnly departureDate)
+    private List<HolidaySearchFlight> GetFlights(string? departingFrom, string travelingTo, DateOnly departureDate)
     {
         var flights = _flightRepository.GetFlights(departingFrom, travelingTo, departureDate);
         return flights.Select(x => new HolidaySearchFlight
