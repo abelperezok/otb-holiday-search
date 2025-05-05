@@ -7,6 +7,33 @@ namespace OTB.HolidaySearch.Tests;
 public class HolidaySearchServiceTests
 {
     [Fact]
+    public void TestSearchNullArgumentNoFlightsNoHotels()
+    {
+        // Arrange
+        var flightRepo = new Mock<IFlightRepository>();
+
+        flightRepo
+            .Setup(x => x.GetFlights(It.IsAny<string[]>(), It.IsAny<string>(), It.IsAny<DateOnly>(), It.IsAny<int>()))
+            .Returns([]);
+
+        var hotelRepo = new Mock<IHotelRepository>();
+
+        hotelRepo
+            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>(), It.IsAny<int>()))
+            .Returns([]);
+        
+        var airportExpander = new DefaultAirportSearchKeyExpander();
+
+        var service = new HolidaySearchService(flightRepo.Object, hotelRepo.Object, airportExpander);
+
+        // Act
+        var ex = Assert.Throws<ArgumentNullException>(() => { service.Search(null!); });
+
+        // Assert
+        Assert.Equal("query", ex.ParamName);
+    }
+    
+    [Fact]
     public void TestSearchEmptyDataNoFlightsNoHotels()
     {
         // Arrange
