@@ -12,11 +12,12 @@ public class JsonHotelRepository : IHotelRepository
         _data = JsonSerializer.Deserialize<List<HotelDataModel>>(json) ?? [];
     }
 
-    public IList<HotelDataModel> GetHotels(DateOnly arrivalDate, uint nights, string localAirport)
+    public IList<HotelDataModel> GetHotels(DateOnly arrivalDate, uint nights, string localAirport, int maximumResutls)
     {
         return _data.Where(
                 x => x.ArrivalDate == arrivalDate && x.Nights == nights && x.LocalAirports.Contains(localAirport))
             .OrderBy(x => x.PricePerNight)
+            .Take(maximumResutls)
             .ToList();
     }
 }

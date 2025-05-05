@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Moq;
+﻿using Moq;
 using OTB.HolidaySearch.Data;
 using OTB.HolidaySearch.Models;
 
@@ -14,13 +13,13 @@ public class HolidaySearchServiceTests
         var flightRepo = new Mock<IFlightRepository>();
 
         flightRepo
-            .Setup(x => x.GetFlights(It.IsAny<string[]>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
+            .Setup(x => x.GetFlights(It.IsAny<string[]>(), It.IsAny<string>(), It.IsAny<DateOnly>(), It.IsAny<int>()))
             .Returns([]);
 
         var hotelRepo = new Mock<IHotelRepository>();
 
         hotelRepo
-            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
+            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>(), It.IsAny<int>()))
             .Returns([]);
         
         var airportExpander = new DefaultAirportSearchKeyExpander();
@@ -49,7 +48,7 @@ public class HolidaySearchServiceTests
         var flightRepo = new Mock<IFlightRepository>();
 
         flightRepo
-            .Setup(x => x.GetFlights(It.IsAny<string[]>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
+            .Setup(x => x.GetFlights(It.IsAny<string[]>(), It.IsAny<string>(), It.IsAny<DateOnly>(), It.IsAny<int>()))
             .Returns([
                 new FlightDataModel
                 {
@@ -65,7 +64,7 @@ public class HolidaySearchServiceTests
         var hotelRepo = new Mock<IHotelRepository>();
 
         hotelRepo
-            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
+            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>(), It.IsAny<int>()))
             .Returns([]);
 
         var airportExpander = new DefaultAirportSearchKeyExpander();
@@ -94,7 +93,7 @@ public class HolidaySearchServiceTests
         var flightRepo = new Mock<IFlightRepository>();
 
         flightRepo
-            .Setup(x => x.GetFlights(It.IsAny<string[]>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
+            .Setup(x => x.GetFlights(It.IsAny<string[]>(), It.IsAny<string>(), It.IsAny<DateOnly>(), It.IsAny<int>()))
             .Returns([
                 new FlightDataModel
                 {
@@ -110,7 +109,7 @@ public class HolidaySearchServiceTests
         var hotelRepo = new Mock<IHotelRepository>();
 
         hotelRepo
-            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
+            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>(), It.IsAny<int>()))
             .Returns([
                 new HotelDataModel
                 {
@@ -160,7 +159,7 @@ public class HolidaySearchServiceTests
         var flightRepo = new Mock<IFlightRepository>();
 
         flightRepo
-            .Setup(x => x.GetFlights(It.IsAny<string[]>(), It.IsAny<string>(), It.IsAny<DateOnly>()))
+            .Setup(x => x.GetFlights(It.IsAny<string[]>(), It.IsAny<string>(), It.IsAny<DateOnly>(), It.IsAny<int>()))
             .Returns([
                 new FlightDataModel
                 {
@@ -185,7 +184,7 @@ public class HolidaySearchServiceTests
         var hotelRepo = new Mock<IHotelRepository>();
 
         hotelRepo
-            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>()))
+            .Setup(x => x.GetHotels(It.IsAny<DateOnly>(), It.IsAny<uint>(), It.IsAny<string>(), It.IsAny<int>()))
             .Returns([
                 new HotelDataModel
                 {

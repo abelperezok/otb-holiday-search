@@ -8,6 +8,8 @@ public class HolidaySearchService
     private readonly IFlightRepository _flightRepository;
     private readonly IHotelRepository _hotelRepository;
     private readonly IAirportSearchKeyExpander _airportSearchKeyExpander;
+    private const int MaxFlights = 10;
+    private const int MaxHotels = 10;
 
     public HolidaySearchService(
         IFlightRepository flightRepository, 
@@ -42,7 +44,7 @@ public class HolidaySearchService
 
     private List<HolidaySearchFlight> GetFlights(string[] departingFrom, string travelingTo, DateOnly departureDate)
     {
-        var flights = _flightRepository.GetFlights(departingFrom, travelingTo, departureDate);
+        var flights = _flightRepository.GetFlights(departingFrom, travelingTo, departureDate, MaxFlights);
         return flights.Select(x => new HolidaySearchFlight
             {
                 Id = x.Id,
@@ -57,7 +59,7 @@ public class HolidaySearchService
 
     private List<HolidaySearchHotel> GetHotels(DateOnly arrivalDate, uint nights, string localAirport)
     {
-        var hotels = _hotelRepository.GetHotels(arrivalDate, nights, localAirport);
+        var hotels = _hotelRepository.GetHotels(arrivalDate, nights, localAirport, MaxHotels);
         return hotels.Select(x => new HolidaySearchHotel
             {
                 Id = x.Id,

@@ -12,7 +12,7 @@ public class JsonFlightRepository : IFlightRepository
         _data = JsonSerializer.Deserialize<List<FlightDataModel>>(json) ?? [];
     }
     
-    public IList<FlightDataModel> GetFlights(string[]? departingFrom, string travelingTo, DateOnly departureDate)
+    public IList<FlightDataModel> GetFlights(string[]? departingFrom, string travelingTo, DateOnly departureDate, int maximumResutls)
     {
         var query = _data.Where(x => x.To == travelingTo && x.DepartureDate == departureDate);
 
@@ -22,6 +22,7 @@ public class JsonFlightRepository : IFlightRepository
         }
             
         return query.OrderBy(x => x.Price)
+            .Take(maximumResutls)
             .ToList();
     }
 }
