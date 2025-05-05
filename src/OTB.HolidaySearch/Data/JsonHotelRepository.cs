@@ -8,8 +8,19 @@ public class JsonHotelRepository : IHotelRepository
     
     public JsonHotelRepository(string jsonFilePath)
     {
-        var json = File.ReadAllText(jsonFilePath);
-        _data = JsonSerializer.Deserialize<List<HotelDataModel>>(json) ?? [];
+        try
+        {
+            var json = File.ReadAllText(jsonFilePath);
+            _data = JsonSerializer.Deserialize<List<HotelDataModel>>(json) ?? [];
+        }
+        catch (FileNotFoundException ex)
+        {
+            throw new InvalidOperationException("Unable to load json file", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("Unknown error loading json file", ex);
+        }
     }
 
     public IList<HotelDataModel> GetHotels(DateOnly arrivalDate, uint nights, string localAirport, int maximumResutls)

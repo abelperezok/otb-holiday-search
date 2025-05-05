@@ -8,8 +8,19 @@ public class JsonFlightRepository : IFlightRepository
     
     public JsonFlightRepository(string jsonFilePath)
     {
-        var json = File.ReadAllText(jsonFilePath);
-        _data = JsonSerializer.Deserialize<List<FlightDataModel>>(json) ?? [];
+        try
+        {
+            var json = File.ReadAllText(jsonFilePath);
+            _data = JsonSerializer.Deserialize<List<FlightDataModel>>(json) ?? [];
+        }
+        catch (FileNotFoundException ex)
+        {
+            throw new InvalidOperationException("Unable to load json file", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("Unknown error loading json file", ex);
+        }
     }
     
     public IList<FlightDataModel> GetFlights(string[]? departingFrom, string travelingTo, DateOnly departureDate, int maximumResutls)

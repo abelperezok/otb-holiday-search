@@ -24,7 +24,7 @@ public class JsonHotelRepositoryTests
         // Act
         var ex = Assert.Throws<InvalidOperationException>(() =>
         {
-            var repo = new JsonFlightRepository("invalid-path");
+            var repo = new JsonHotelRepository("invalid-path");
         });
 
         // Assert
