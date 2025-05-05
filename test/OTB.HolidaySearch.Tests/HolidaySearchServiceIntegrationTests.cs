@@ -135,4 +135,26 @@ public class HolidaySearchServiceIntegrationTests
         Assert.Equal(14u, result.Results.First().Hotel.Nights);
         Assert.Equal(14 * 75 + 125, result.Results.First().TotalPrice);
     }
+    
+        
+    [Fact]
+    public void TestSearchNewYorkAriports()
+    {
+        // Arrange
+        var service = new HolidaySearchService(_flightRepo, _hotelRepo, _airportSearchKeyExpander);
+        var query = new HolidaySearchRequest
+        {
+            DepartingFrom = HolidaySearchRequestAirports.AnyNewYorkAirport,
+            TravelingTo = string.Empty,
+            DepartureDate = DateOnly.MinValue,
+            Duration = 0
+        };
+
+        // Act
+        var result = service.Search(query);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result.Results);
+    }
 }
